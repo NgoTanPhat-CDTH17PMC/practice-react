@@ -3,18 +3,28 @@ import Table from "react-bootstrap/Table";
 import axios from "axios";
 import { fetchAllUser } from "../services/UserService";
 import Button from "react-bootstrap/Button";
+import ReactPaginate from "react-paginate";
+
 const TableUser = (props) => {
-  const [listUser, setListUser] = useState([]);
+  const [listUsers, setListUsers] = useState([]);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalPages, setTotalPages] = useState([]);
   useEffect(() => {
-    getUsers();
+    getUsers(1);
   }, []);
 
-  const getUsers = async () => {
-    let res = await fetchAllUser();
+  const getUsers = async (page) => {
+    let res = await fetchAllUser(page);
     if (res && res.data) {
-      setListUser(res.data);
+      setTotalPages(res.total_pages);
+      setTotalUsers(res.total);
+      setListUsers(res.data);
     } else {
     }
+  };
+
+  const handlePageClick = (event) => {
+    getUsers(+event.selected + 1);
   };
   return (
     <>
@@ -29,9 +39,9 @@ const TableUser = (props) => {
           </tr>
         </thead>
         <tbody>
-          {listUser &&
-            listUser.length > 0 &&
-            listUser.map((item, index) => {
+          {listUsers &&
+            listUsers.length > 0 &&
+            listUsers.map((item, index) => {
               return (
                 <tr key={`user-${index}`}>
                   <td>{item.id}</td>
@@ -47,6 +57,26 @@ const TableUser = (props) => {
             })}
         </tbody>
       </Table>
+      <ReactPaginate
+        nextLabel=">"
+        onPageChange={(event) => handlePageClick(event)}
+        pageRangeDisplayed={3}
+        marginPagesDisplayed={2}
+        pageCount={totalPages}
+        previousLabel="<"
+        pageClassName="page-item"
+        pageLinkClassName="page-link"
+        previousClassName="page-item"
+        previousLinkClassName="page-link"
+        nextClassName="page-item"
+        nextLinkClassName="page-link"
+        breakLabel="..."
+        breakClassName="page-item"
+        breakLinkClassName="page-link"
+        containerClassName="pagination"
+        activeClassName="active"
+        renderOnZeroPageCount={null}
+      />
     </>
   );
 };
