@@ -73,7 +73,7 @@ const TableUser = (props) => {
         breakLabel="..."
         breakClassName="page-item"
         breakLinkClassName="page-link"
-        containerClassName="pagination"
+        containerClassName="pagination d-flex justify-content-center"
         activeClassName="active"
         renderOnZeroPageCount={null}
       />
