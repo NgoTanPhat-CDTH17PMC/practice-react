@@ -4,11 +4,26 @@ import axios from "axios";
 import { fetchAllUser } from "../services/UserService";
 import Button from "react-bootstrap/Button";
 import ReactPaginate from "react-paginate";
+import ModalAddNew from "./ModalAddNew";
+import ModalEditUser from "./ModalEditUser";
+import _ from "lodash";
 
 const TableUser = (props) => {
   const [listUsers, setListUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalPages, setTotalPages] = useState([]);
+  const [isShowModalAddNew, setIsShowModalAddNew] = useState(false);
+  const [isShowModalEdit, setIsShowModalEdit] = useState(false);
+  const [dataUserEdit, setDataUserEdit] = useState({});
+
+  const handleClose = () => {
+    setIsShowModalAddNew(false);
+    setIsShowModalEdit(false);
+  };
+
+  const handleUpdateUser = (user) => {
+    setListUsers([user, ...listUsers]);
+  };
   useEffect(() => {
     getUsers(1);
   }, []);
@@ -26,8 +41,26 @@ const TableUser = (props) => {
   const handlePageClick = (event) => {
     getUsers(+event.selected + 1);
   };
+
+  const handleEditUser = (user) => {
+    setIsShowModalEdit(true);
+    setDataUserEdit(user);
+  };
+
+  const handleEditUserFromModal = (user) => {
+    let cloneListUsers = _.cloneDeep(listUsers);
+    let index = listUsers.findIndex((item) => item.id === user.id);
+    cloneListUsers[index].first_name = user.first_name;
+    setListUsers(cloneListUsers);
+  };
   return (
     <>
+      <div className="my-3 add-new d-flex justify-content-between">
+        <span>List User:</span>
+        <Button variant="success" onClick={() => setIsShowModalAddNew(true)}>
+          Add new user
+        </Button>
+      </div>
       <Table striped bordered hover responsive>
         <thead>
           <tr>
@@ -49,7 +82,12 @@ const TableUser = (props) => {
                   <td>{item.first_name}</td>
                   <td>{item.last_name}</td>
                   <td>
-                    <Button variant="warning mx-3">Edit</Button>
+                    <Button
+                      variant="warning mx-3"
+                      onClick={() => handleEditUser(item)}
+                    >
+                      Edit
+                    </Button>
                     <Button variant="danger">Delete</Button>
                   </td>
                 </tr>
@@ -76,6 +114,19 @@ const TableUser = (props) => {
         containerClassName="pagination d-flex justify-content-center"
         activeClassName="active"
         renderOnZeroPageCount={null}
+      />
+
+      <ModalAddNew
+        show={isShowModalAddNew}
+        handleClose={handleClose}
+        handleUpdateTable={handleUpdateUser}
+      />
+
+      <ModalEditUser
+        show={isShowModalEdit}
+        handleClose={handleClose}
+        dataUserEdit={dataUserEdit}
+        handleEditUserFromModal={handleEditUserFromModal}
       />
     </>
   );
