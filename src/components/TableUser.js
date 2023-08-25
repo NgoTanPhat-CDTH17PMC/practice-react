@@ -8,6 +8,7 @@ import ModalAddNew from "./ModalAddNew";
 import ModalEditUser from "./ModalEditUser";
 import _ from "lodash";
 import ModalConfirm from "./ModalDeleteUser";
+import "./TableUser.scss";
 
 const TableUser = (props) => {
   const [listUsers, setListUsers] = useState([]);
@@ -17,6 +18,8 @@ const TableUser = (props) => {
   const [isShowModalEdit, setIsShowModalEdit] = useState(false);
   const [dataUserEdit, setDataUserEdit] = useState({});
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+  const [sortBy, setSortBy] = useState("asc");
+  const [sortField, setSortField] = useState("id");
 
   const handleClose = () => {
     setIsShowModalAddNew(false);
@@ -68,6 +71,15 @@ const TableUser = (props) => {
     setListUsers(cloneListUsers);
   };
 
+  const handleSort = (sortBy, sortField) => {
+    setSortBy(sortBy);
+    setSortField(sortField);
+
+    let cloneListUsers = _.cloneDeep(listUsers);
+    cloneListUsers = _.orderBy(cloneListUsers, [sortField], [sortBy]);
+    setListUsers(cloneListUsers);
+  };
+
   return (
     <>
       <div className="my-3 add-new d-flex justify-content-between">
@@ -79,11 +91,59 @@ const TableUser = (props) => {
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Email</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Action</th>
+            <th className="sort-header">
+              <span>ID</span>
+              <span>
+                <i
+                  className="fa fa-solid fa-arrow-down-long"
+                  onClick={() => handleSort("desc", "id")}
+                ></i>
+                <i
+                  className="fa fa-solid fa-arrow-up-long"
+                  onClick={() => handleSort("asc", "id")}
+                ></i>
+              </span>
+            </th>
+            <th className="sort-header">
+              <span>Email</span>
+              <span>
+                <i
+                  className="fa fa-solid fa-arrow-down-long"
+                  onClick={() => handleSort("desc", "email")}
+                ></i>
+                <i
+                  className="fa fa-solid fa-arrow-up-long"
+                  onClick={() => handleSort("asc", "email")}
+                ></i>
+              </span>
+            </th>
+            <th className="sort-header">
+              <span>First Name</span>
+              <span>
+                <i
+                  className="fa fa-solid fa-arrow-down-long"
+                  onClick={() => handleSort("desc", "first_name")}
+                ></i>
+                <i
+                  className="fa fa-solid fa-arrow-up-long"
+                  onClick={() => handleSort("asc", "first_name")}
+                ></i>
+              </span>
+            </th>
+            <th className="sort-header">
+              <span>Last Name</span>
+              <span>
+                <i
+                  className="fa fa-solid fa-arrow-down-long"
+                  onClick={() => handleSort("desc", "last_name")}
+                ></i>
+                <i
+                  className="fa fa-solid fa-arrow-up-long"
+                  onClick={() => handleSort("asc", "last_name")}
+                ></i>
+              </span>
+            </th>
+            <th className="sort-header">Action</th>
           </tr>
         </thead>
         <tbody>

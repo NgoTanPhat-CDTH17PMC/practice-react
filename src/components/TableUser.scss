@@ -1,0 +1,13 @@
+.sort-header {
+    position: relative;
+
+    span:last-child {
+        position: absolute;
+        right   : 5px;
+
+        i {
+            cursor : pointer;
+            padding: 0 2px;
+        }
+    }
+}
