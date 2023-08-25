@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import ReactPaginate from "react-paginate";
 import ModalAddNew from "./ModalAddNew";
 import ModalEditUser from "./ModalEditUser";
-import _ from "lodash";
+import _, { clone, debounce } from "lodash";
 import ModalConfirm from "./ModalDeleteUser";
 import "./TableUser.scss";
 
@@ -20,6 +20,7 @@ const TableUser = (props) => {
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
   const [sortBy, setSortBy] = useState("asc");
   const [sortField, setSortField] = useState("id");
+  const [keyword, setKeyword] = useState("");
 
   const handleClose = () => {
     setIsShowModalAddNew(false);
@@ -80,6 +81,20 @@ const TableUser = (props) => {
     setListUsers(cloneListUsers);
   };
 
+  const handleSearch = debounce((event) => {
+    // setKeyword(event.target.value);
+    let term = event.target.value;
+    if (term) {
+      let cloneListUsers = _.cloneDeep(listUsers);
+      cloneListUsers = cloneListUsers.filter((item) =>
+        item.email.includes(term)
+      );
+      setListUsers(cloneListUsers);
+    } else {
+      getUsers(1);
+    }
+  }, 500);
+
   return (
     <>
       <div className="my-3 add-new d-flex justify-content-between">
@@ -87,6 +102,14 @@ const TableUser = (props) => {
         <Button variant="success" onClick={() => setIsShowModalAddNew(true)}>
           Add new user
         </Button>
+      </div>
+      <div className="col-3 my-3">
+        <input
+          type="text"
+          className="form-control"
+          onChange={(event) => handleSearch(event)}
+          placeholder="Search User..."
+        />
       </div>
       <Table striped bordered hover responsive>
         <thead>
