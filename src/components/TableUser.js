@@ -10,6 +10,8 @@ import _, { clone, debounce } from "lodash";
 import ModalConfirm from "./ModalDeleteUser";
 import "./TableUser.scss";
 import { CSVLink, CSVDownload } from "react-csv";
+import Papa from "papaparse";
+import { toast } from "react-toastify";
 
 const TableUser = (props) => {
   const [listUsers, setListUsers] = useState([]);
@@ -123,6 +125,53 @@ const TableUser = (props) => {
       done();
     }
   };
+
+  const handleImportCSV = (event) => {
+    if (event.target && event.target.files && event.target.files[0]) {
+      let file = event.target.files[0];
+      if (file.type !== "text/csv") {
+        toast.error("Only accept CSV type");
+        return;
+      }
+
+      // Parse local CSV file
+      Papa.parse(file, {
+        // header: true,
+        complete: function (results) {
+          let rawCSV = results.data;
+          if (rawCSV.length > 0) {
+            console.log(rawCSV[0], rawCSV[0].length);
+            console.log(rawCSV[0][0], rawCSV[0][1], rawCSV[0][2]);
+            if (rawCSV[0] && rawCSV[0].length === 3) {
+              if (
+                rawCSV[0][0] !== "email" ||
+                rawCSV[0][1] !== "first_name" ||
+                rawCSV[0][2] !== "last_name"
+              ) {
+                toast.error("Wrong format CSV file!");
+              } else {
+                let result = [];
+                rawCSV.map((item, index) => {
+                  if (index > 0 && item.length === 3) {
+                    let obj = {};
+                    obj.email = item[0];
+                    obj.first_name = item[1];
+                    obj.last_name = item[2];
+                    result.push(obj);
+                  }
+                });
+                setListUsers(result);
+              }
+            } else {
+              toast.error("Wrong format CSV file!");
+            }
+          } else {
+            toast.error("Not found data on CSV file!");
+          }
+        },
+      });
+    }
+  };
   return (
     <>
       <div className="my-3 add-new d-flex justify-content-between">
@@ -132,7 +181,12 @@ const TableUser = (props) => {
             <i className="mx-2 fas fa-file-import"></i>
             Import
           </label>
-          <input id="test" type="file" hidden />
+          <input
+            id="test"
+            type="file"
+            hidden
+            onChange={(event) => handleImportCSV(event)}
+          />
 
           <CSVLink
             data={dataExport}
