@@ -7,6 +7,7 @@ import ReactPaginate from "react-paginate";
 import ModalAddNew from "./ModalAddNew";
 import ModalEditUser from "./ModalEditUser";
 import _ from "lodash";
+import ModalConfirm from "./ModalDeleteUser";
 
 const TableUser = (props) => {
   const [listUsers, setListUsers] = useState([]);
@@ -15,10 +16,12 @@ const TableUser = (props) => {
   const [isShowModalAddNew, setIsShowModalAddNew] = useState(false);
   const [isShowModalEdit, setIsShowModalEdit] = useState(false);
   const [dataUserEdit, setDataUserEdit] = useState({});
+  const [isShowModalDelete, setIsShowModalDelete] = useState(false);
 
   const handleClose = () => {
     setIsShowModalAddNew(false);
     setIsShowModalEdit(false);
+    setIsShowModalDelete(false);
   };
 
   const handleUpdateUser = (user) => {
@@ -53,6 +56,18 @@ const TableUser = (props) => {
     cloneListUsers[index].first_name = user.first_name;
     setListUsers(cloneListUsers);
   };
+
+  const handleDeleteUser = (user) => {
+    setIsShowModalDelete(true);
+    setDataUserEdit(user);
+  };
+
+  const handleDeleteUserFromModal = (user) => {
+    let cloneListUsers = _.cloneDeep(listUsers);
+    cloneListUsers = cloneListUsers.filter((item) => item.id !== user.id);
+    setListUsers(cloneListUsers);
+  };
+
   return (
     <>
       <div className="my-3 add-new d-flex justify-content-between">
@@ -88,7 +103,12 @@ const TableUser = (props) => {
                     >
                       Edit
                     </Button>
-                    <Button variant="danger">Delete</Button>
+                    <Button
+                      variant="danger"
+                      onClick={() => handleDeleteUser(item)}
+                    >
+                      Delete
+                    </Button>
                   </td>
                 </tr>
               );
@@ -127,6 +147,13 @@ const TableUser = (props) => {
         handleClose={handleClose}
         dataUserEdit={dataUserEdit}
         handleEditUserFromModal={handleEditUserFromModal}
+      />
+
+      <ModalConfirm
+        show={isShowModalDelete}
+        handleClose={handleClose}
+        dataUserEdit={dataUserEdit}
+        handleDeleteUserFromModal={handleDeleteUserFromModal}
       />
     </>
   );
