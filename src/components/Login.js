@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { loginApi } from "../services/UserService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ const Login = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [loadingApi, setLoadingApi] = useState(false);
   const navigate = useNavigate();
+  const { loginContext } = useContext(UserContext);
 
   useEffect(() => {
     let token = localStorage.getItem("token");
@@ -28,6 +30,7 @@ const Login = () => {
       localStorage.setItem("token", res.token);
       toast.success("Login successful!");
       setLoadingApi(false);
+      loginContext(email, res.token);
       navigate("/");
     } else {
       if (res && +res.status === 400) {
