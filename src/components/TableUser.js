@@ -216,7 +216,7 @@ const TableUser = (props) => {
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th className="sort-header">
+            <th className="sort-header px-3">
               <span>ID</span>
               <span>
                 <i
@@ -229,7 +229,7 @@ const TableUser = (props) => {
                 ></i>
               </span>
             </th>
-            <th className="sort-header">
+            <th className="sort-header px-3">
               <span>Email</span>
               <span>
                 <i
@@ -242,7 +242,7 @@ const TableUser = (props) => {
                 ></i>
               </span>
             </th>
-            <th className="sort-header">
+            <th className="sort-header px-3">
               <span>First Name</span>
               <span>
                 <i
@@ -255,7 +255,7 @@ const TableUser = (props) => {
                 ></i>
               </span>
             </th>
-            <th className="sort-header">
+            <th className="sort-header px-3">
               <span>Last Name</span>
               <span>
                 <i
@@ -268,7 +268,7 @@ const TableUser = (props) => {
                 ></i>
               </span>
             </th>
-            <th className="sort-header">Action</th>
+            <th className="sort-header px-3">Action</th>
           </tr>
         </thead>
         <tbody>

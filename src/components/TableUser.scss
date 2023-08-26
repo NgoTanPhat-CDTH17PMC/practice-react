@@ -8,6 +8,10 @@
         i {
             cursor : pointer;
             padding: 0 2px;
+
+            &:hover {
+                color: red
+            }
         }
     }
 }
