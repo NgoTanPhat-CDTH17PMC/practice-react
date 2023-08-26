@@ -3,41 +3,51 @@ import { loginApi } from "../services/UserService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { handleLoginRedux } from "../redux/actions/userAction";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [loadingApi, setLoadingApi] = useState(false);
   const navigate = useNavigate();
-  const { loginContext } = useContext(UserContext);
+
+  const dispatch = useDispatch();
+  const loadingApi = useSelector((state) => state.user.isLoading);
+  const errorApi = useSelector((state) => state.user.isError);
+  const account = useSelector((state) => state.user.account);
 
   useEffect(() => {
-    let token = localStorage.getItem("token");
-    if (token) {
+    // let token = localStorage.getItem("token");
+    // if (token) {
+    //   navigate("/");
+    // }
+    if (account && account.auth === true) {
       navigate("/");
     }
-  }, []);
+  }, [account]);
 
   const handleLogin = async () => {
     if (!email || !password) {
       toast.error("Email/Password can not be empty!");
       return;
     }
-    let res = await loginApi(email.trim(), password);
-    setLoadingApi(true);
-    if (res && res.token) {
-      localStorage.setItem("token", res.token);
-      toast.success("Login successful!");
-      setLoadingApi(false);
-      loginContext(email, res.token);
-      navigate("/");
-    } else {
-      if (res && +res.status === 400) {
-        toast.error(res.data.error);
-        setLoadingApi(false);
-      }
-    }
+
+    dispatch(handleLoginRedux(email, password));
+
+    // let res = await loginApi(email.trim(), password);
+    // if (res && res.token) {
+    //   localStorage.setItem("token", res.token);
+    //   toast.success("Login successful!");
+    //   setLoadingApi(false);
+    //   loginContext(email, res.token);
+    //   navigate("/");
+    // } else {
+    //   if (res && +res.status === 400) {
+    //     toast.error(res.data.error);
+    //     setLoadingApi(false);
+    //   }
+    // }
   };
 
   const handleBack = () => {
@@ -49,6 +59,7 @@ const Login = () => {
       handleLogin();
     }
   };
+
   return (
     <>
       <div className="login-container d-flex mx-auto flex-column col-12 col-md-6">
