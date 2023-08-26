@@ -4,14 +4,15 @@ import Header from "./components/Header";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import { ToastContainer, toast } from "react-toastify";
-
 import { useContext, useEffect } from "react";
 import { UserContext } from "./context/UserContext";
 import AppRoutes from "./routes/AppRoutes";
+import { useSelector } from "react-redux";
 
 function App() {
   const { user, loginContext } = useContext(UserContext);
-
+  const dataRedux = useSelector((state) => state.user.account);
+  console.log(dataRedux);
   useEffect(() => {
     if (localStorage.getItem("token")) {
       loginContext(
