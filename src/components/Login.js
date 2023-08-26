@@ -24,7 +24,7 @@ const Login = () => {
       toast.error("Email/Password can not be empty!");
       return;
     }
-    let res = await loginApi(email, password);
+    let res = await loginApi(email.trim(), password);
     setLoadingApi(true);
     if (res && res.token) {
       localStorage.setItem("token", res.token);
@@ -43,6 +43,12 @@ const Login = () => {
   const handleBack = () => {
     navigate("/");
   };
+
+  const handlePressEnter = (event) => {
+    if (event && event.key === "Enter") {
+      handleLogin();
+    }
+  };
   return (
     <>
       <div className="login-container d-flex mx-auto flex-column col-12 col-md-6">
@@ -60,6 +66,7 @@ const Login = () => {
             placeholder="Password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            onKeyDown={(event) => handlePressEnter(event)}
           />
           {isShowPassword ? (
             <i
