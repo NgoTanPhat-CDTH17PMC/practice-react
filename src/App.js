@@ -4,12 +4,10 @@ import Header from "./components/Header";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import { ToastContainer, toast } from "react-toastify";
-import Home from "./components/Home";
-import { Routes, Route, Link } from "react-router-dom";
-import TableUser from "./components/TableUser";
-import Login from "./components/Login";
+
 import { useContext, useEffect } from "react";
 import { UserContext } from "./context/UserContext";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
   const { user, loginContext } = useContext(UserContext);
@@ -30,11 +28,7 @@ function App() {
       </Container> */}
       <Header />
       <Container>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/users" element={<TableUser />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
+        <AppRoutes />
       </Container>
       <ToastContainer
         position="top-right"

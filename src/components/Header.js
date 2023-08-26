@@ -26,7 +26,6 @@ const Header = (props) => {
     toast.success("Logout successful!");
   };
 
-  console.log(user);
   return (
     <>
       <Navbar expand="lg" className="bg-body-tertiary">
