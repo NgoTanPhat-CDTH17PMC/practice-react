@@ -13,3 +13,56 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+
+.login-container {
+
+
+  .title {
+    text-align : center;
+    font-size  : 23px;
+    font-weight: 700;
+    padding-top: 30px;
+  }
+
+  .text {
+    font-weight   : 600;
+    padding-bottom: 3px;
+  }
+
+  input {
+    padding      : 5px;
+    outline      : none;
+    margin-bottom: 10px;
+  }
+
+  .password-group {
+    position: relative;
+
+    input {
+      width: 100%;
+    }
+
+    i {
+      cursor   : pointer;
+      position : absolute;
+      right    : 20px;
+      top      : 50%;
+      transform: translateY(calc(-50% - 5px));
+    }
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .back {
+    margin-top: 5px;
+    cursor    : pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
